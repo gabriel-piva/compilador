@@ -17,7 +17,7 @@ int nlin = 1;
 int yyerror(char *s);
 %}
 
-identificador [a-zA-Z]([a-zA-Z0-9])*
+identificador [_a-zA-Z]([a-zA-Z0-9])*
 numero [0-9]+
 espaco [ \t]+
 novalinha [\n]
@@ -41,6 +41,10 @@ fimenquanto     return T_FIMENQTO;
 inteiro         return T_INTEIRO;
 logico          return T_LOGICO;
 
+func            return T_FUNC;
+fimfunc         return T_FIMFUNC;
+retorne         return T_RETORNE;
+
 "<-"            return T_ATRIBUI;
 "+"             return T_MAIS;
 "-"             return T_MENOS;
@@ -59,10 +63,6 @@ nao             return T_NAO;
 "V"             return T_V;
 "F"             return T_F;
 
-func            return T_FUNC;
-fimfunc         return T_FIMFUNC;
-retorne         return T_RETORNE;
-
 "//".*          ;
 "/*"            BEGIN(coment);
 <coment>"*/"    BEGIN(INITIAL);
@@ -73,8 +73,10 @@ retorne         return T_RETORNE;
 {numero}        { strcpy(atomo, yytext); return T_NUMERO; }
 {espaco}        ;
 {novalinha}     nlin++;
-.               yyerror("Erro lexico");
+.               ;
 %%
+
+/*.               yyerror("Erro lexico"); Na linha 76*/
 
 int yyerror(char *s) {
     printf("ERRO na linha %d: %s\n", nlin, s);

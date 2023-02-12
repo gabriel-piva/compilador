@@ -115,32 +115,10 @@ void mostraTabela() {
 // Usada para endereços, viaráveis, rótulos
 
 #define TAM_PIL 100
-int pilha[TAM_PIL];
 int topo = -1;
 
 /*
-Sugestão para a pilha
-struct {
-    int valor;
-    char tipo; // r rotulo, n numero de variaveis, t tipo e p posicao
-} pilha[TAM-PIL];
-
-void empilha (int valor, char tipo) {
-    if (topo == TAM_PIL)
-        yyerror ("Pilha semântica cheia!");
-    pilha[++topo] = valor;
-    pilha[topo] = tipo;
-}
-
-int desempilha(char tipo) {
-    if (topo == -1) 
-        yyerror("Pilha semântica vazia!");
-    if (pilha[topo].tipo != tipo) 
-        yyerror("Desempilhamento errado");
-    return pilha[topo--].valor;
-}
-
-*/
+int pilha[TAM_PIL];
 
 void empilha (int valor) {
     if (topo == TAM_PIL)
@@ -153,18 +131,41 @@ int desempilha() {
         yyerror("Pilha semântica vazia!");
     return pilha[topo--];
 }
+*/
 
-void mostraPilha() {
+// Sugestão para a pilha
+struct {
+    int valor;
+    char tipo; // r rotulo, n numero de variaveis, t tipo e p posicao
+} pilha[TAM_PIL];
+
+void empilha (int valor, char tipo) {
+    if (topo == TAM_PIL)
+        yyerror ("Pilha semântica cheia!");
+    pilha[++topo].valor = valor;
+    pilha[topo].tipo = tipo;
+}
+
+void mostraPilha(){
     int i = topo;
     printf("Pilha = [ ");
-    int j = 0;
-    while(i >= 0) {
-        printf("%d ", j);
-        printf("( %d )", pilha[i]);
+    while (i >=0) {
+        printf("(%d, %c) ", pilha[i].valor, pilha[i].tipo);
         i--;
-        j++;
     }
-    printf(" ]\n");
+    printf("]\n");
+}
+
+int desempilha(char tipo) {
+    if (topo == -1) 
+        yyerror("Pilha semântica vazia!");
+    if (pilha[topo].tipo != tipo) {
+        char msg[100];
+        sprintf(msg, "Erro ao desempilhar: esperava [%c] e encontrou [%c]", tipo, pilha[topo].tipo);
+        mostraPilha();
+        yyerror(msg);
+    }
+    return pilha[topo--].valor;
 }
 
 // ----------------------------------------------------------------------
@@ -172,11 +173,11 @@ void mostraPilha() {
 // Teste de tipo de variável para operadores
 
 void testaTipo(int tipo1, int tipo2, int ret) {
-    int t1 = desempilha();
-    int t2 = desempilha();
+    int t1 = desempilha('t');
+    int t2 = desempilha('t');
     if(t1 != tipo1 || t2 != tipo2)
         yyerror("Incompatibilidade de tipo!");
-    empilha(ret);
+    empilha(ret, 'r');
 }
 
 // ----------------------------------------------------------------------
@@ -191,6 +192,17 @@ void ajustarParametros(int pos, int contaPar) {
         inicio--;       
     } 
     tabSimb[posicaoFuncao].npar = contaPar;
+}
+
+// ----------------------------------------------------------------------
+
+// Função para remover as variáveis locais da tabela de símbolos
+
+void removerLocais(int pos) {
+    while(tabSimb[pos+1].esc == 'l') {
+        pos++;
+        posTab--;
+    }
 }
 
 // ----------------------------------------------------------------------
