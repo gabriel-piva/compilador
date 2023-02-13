@@ -24,6 +24,7 @@ int rotulo = 0;     // Marcar lugares no código
 int tipo;           // Tipo das variáveis
 char escopo = 'g';  // Escopo das variáveis
 int posFunc;        // Posição da função
+int auxPar = 0;     // Auxiliar para verificar os tipos de parâmetros
 %}
 
 %token T_PROGRAMA
@@ -456,6 +457,7 @@ chamada
             // Uma opção seria empilhar o número de argumento no final 
             // Empilha os argumentos
             // Salva na pilha a posição e depois os tipos de cada argumento
+            auxPar = 0;
         }
       T_FECHA
         {
@@ -472,9 +474,23 @@ lista_argumentos
     | expressao 
         {
             // Depos de cada expressão sobra o tipo
-            desempilha('t');
+            int tip = desempilha('t');
+            if(tabSimb[posFunc].par[auxPar] != tip)
+                yyerror("Incompatibilidade de tipo nos parâmetros da função.");
+            auxPar++;
         }
       lista_argumentos
+        {
+            //int aux = tabSimb[posFunc].npar - 1;
+            // for(int i = aux; i >= 0; i--) {
+            //     printf("i = %d, valor = %d\n", i, tabSimb[posFunc].par[i]);
+            //     // mostraPilha();
+            //     int t = desempilha('t');
+            //     if(tabSimb[posFunc].par[i] != t) {
+            //         yyerror("Incompatibilidade de tipo nos parâmetros da função.");
+            //     }
+            // }
+        }
     ;
 
 termo 
