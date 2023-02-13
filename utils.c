@@ -92,18 +92,24 @@ void mostraTabela() {
         printf("-");
     for (int i = 0; i < posTab; i++) {
         printf(
-            "\n%30s | %3d | %s | %s | %3c | L%3d | %4d |", 
+            "\n%30s | %3d | %s | %s | %3c |", 
             tabSimb[i].id, 
             tabSimb[i].end, 
             tabSimb[i].tip == INT ? "INT" : "LOG", 
             tabSimb[i].cat == 'v' ? "VAR" : tabSimb[i].cat == 'f' ? "FUN" : "PAR", 
-            tabSimb[i].esc, 
-            tabSimb[i].rot, 
-            tabSimb[i].npar
+            tabSimb[i].esc
         );
-        for(int j = 0; j < tabSimb[i].npar; j++) {
-            printf("[ %s ", tabSimb[i].par[j] == INT ? "INT" : "LOG");
-            printf("]");
+        if(tabSimb[i].cat == 'f') {
+            printf(" L%2d  | %4d |", 
+                tabSimb[i].rot, 
+                tabSimb[i].npar
+            );
+            for(int j = 0; j < tabSimb[i].npar; j++) {
+                printf(" [ %s ", tabSimb[i].par[j] == INT ? "INT" : "LOG");
+                printf("]");
+            }
+        } else {
+            printf("   -  |   -  |  - ");
         }
     }
     printf("\n");

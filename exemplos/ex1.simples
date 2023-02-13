@@ -1,4 +1,5 @@
 programa teste1
+inteiro y
     func inteiro maior (inteiro a inteiro b)
     inteiro x
     inicio
