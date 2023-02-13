@@ -427,10 +427,6 @@ identificador
         {
             int pos = buscaSimbolo(atomo);
             empilha(pos, 'p');
-            // COM ISSO
-            // int pos = buscaSimbolo(atomo);
-            // fprintf(yyout, "\tCRVG\t%d\n", tabSimb[pos].end); // Essa linha não é aqui, não sabe se é global
-            // empilha(tabSimb[pos].tip);// Salva apenas a posição
         }
     ;
 
@@ -438,7 +434,6 @@ chamada
     : /* vazio */
         {
             // Aqui é uma variável global ou local normal
-            // SEM ISSO
             int pos = desempilha('p');
             if(tabSimb[pos].esc == 'g') {
                 fprintf(yyout, "\tCRVG\t%d\n", tabSimb[pos].end);
@@ -449,7 +444,6 @@ chamada
         }
     | T_ABRE 
         {
-            // SEM ISSO
             fprintf(yyout,"\tAMEM\t%d\n", 1);
         }
       lista_argumentos 
@@ -461,7 +455,6 @@ chamada
         }
       T_FECHA
         {
-            // SEM ISSO
             int pos = desempilha('p');
             fprintf(yyout, "\tSVCP\n");
             fprintf(yyout, "\tDSVS\tL%d\n", tabSimb[pos].rot);
