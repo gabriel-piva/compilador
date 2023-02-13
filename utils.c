@@ -162,7 +162,7 @@ int desempilha(char tipo) {
     if (pilha[topo].tipo != tipo) {
         char msg[100];
         sprintf(msg, "Erro ao desempilhar: esperava [%c] e encontrou [%c]", tipo, pilha[topo].tipo);
-        mostraPilha();
+        // mostraPilha();
         yyerror(msg);
     }
     return pilha[topo--].valor;
@@ -177,7 +177,7 @@ void testaTipo(int tipo1, int tipo2, int ret) {
     int t2 = desempilha('t');
     if(t1 != tipo1 || t2 != tipo2)
         yyerror("Incompatibilidade de tipo!");
-    empilha(ret, 'r');
+    empilha(ret, 't');
 }
 
 // ----------------------------------------------------------------------

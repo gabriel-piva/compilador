@@ -77,7 +77,7 @@ programa
         { contaVar = 0; }
       variaveis 
         {
-            mostraTabela();
+            //mostraTabela();
             empilha(contaVar, 'n'); 
             if (contaVar) 
                 fprintf(yyout,"\tAMEM\t%d\n", contaVar); 
@@ -85,7 +85,7 @@ programa
       rotinas
       T_INICIO 
         {
-            mostraTabela();
+            //mostraTabela();
         }
         lista_comandos T_FIM
         {
@@ -199,16 +199,21 @@ funcao
         }
       variaveis 
         {
-            empilha(contaLoc, 'n');
-            if (contaLoc) 
+            // empilha(contaLoc, 'n');
+            if (contaLoc > 0) 
                 fprintf(yyout,"\tAMEM\t%d\n", contaLoc); 
         } 
       T_INICIO lista_comandos T_FIMFUNC
         {
             escopo = 'g';
             contaPar = 0;
-            mostraTabela(); // Antes de remover as variáveis Loc e Par
+
+            puts("\n\nFinalização da função: ");
+             
+            puts("Antes de remover locais;\n");
+            mostraTabela();// Antes de remover as variáveis Loc e Par
             removerLocais(posFunc);
+            puts("Depois de remover locais;\n");
             mostraTabela(); // Após remover as Loc e Par
         }
     ;
@@ -247,6 +252,7 @@ comando
 retorno
     : T_RETORNE expressao
         {
+            mostraPilha();
             /*
                 Verificar se está no escopo local
                 Verificar se o topo é compatível
@@ -261,9 +267,8 @@ retorno
                 yyerror("Incompatibilidade de tipo!");
             fprintf(yyout, "\tARZL\t%d\n", tabSimb[posFunc].end);
 
-            int contaLocais = desempilha('n');
-            if (contaLocais)
-                fprintf(yyout, "\tDMEM\t%d\n", contaLocais);
+            if (contaLoc > 0)
+                fprintf(yyout, "\tDMEM\t%d\n", contaLoc);
 
             fprintf(yyout,"\tRTSP\t%d\n", contaPar);
         }

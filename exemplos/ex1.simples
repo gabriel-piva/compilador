@@ -1,5 +1,6 @@
 programa teste1
     func inteiro maior (inteiro a inteiro b)
+    inteiro x
     inicio
         se a > b
             entao retorne a
