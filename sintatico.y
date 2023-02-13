@@ -21,9 +21,9 @@ int contaVar;       // Número de variáveis declaradas GLOBAIS
 int contaLoc;       // Número de variáveis declaradas LOCAIS
 int contaPar;       // Auxiliar para contar parâmetros de cada função
 int rotulo = 0;     // Marcar lugares no código
-int tipo;
+int tipo;           // Tipo das variáveis
 char escopo = 'g';  // Escopo das variáveis
-int posFunc;
+int posFunc;        // Posição da função
 %}
 
 %token T_PROGRAMA
