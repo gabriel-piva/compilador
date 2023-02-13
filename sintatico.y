@@ -230,6 +230,7 @@ parametro
             elemTab.tip = tipo;
             elemTab.cat = 'p';
             elemTab.esc = escopo;
+            tabSimb[posFunc].par[contaPar] = tipo;
             contaPar++;
             insereSimbolo(elemTab);
         }
