@@ -73,10 +73,8 @@ nao             return T_NAO;
 {numero}        { strcpy(atomo, yytext); return T_NUMERO; }
 {espaco}        ;
 {novalinha}     nlin++;
-.               ;
+.               yyerror("Erro lexico");
 %%
-
-/*.               yyerror("Erro lexico"); Na linha 76*/
 
 int yyerror(char *s) {
     printf("ERRO na linha %d: %s\n", nlin, s);
