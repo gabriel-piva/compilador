@@ -75,15 +75,6 @@ void insereSimbolo(struct elemTabSimbolos elem) {
     tabSimb[posTab++] = elem;
 }
 
-/*
-    Sugestão: desenvolver uma rotina para a ajustar o 
-    endereço dos parametros na tabela de simbolos e o vetor 
-    de parametros da funcao, depois que for cadastrado o ultimo 
-    parametro
-
-    Modificar a rotina mostraTabela para apresentao os outros campos
-*/
-
 void mostraTabela() {
     puts("----------------------");
     puts("| Tabela de Simbolos |");
@@ -123,22 +114,6 @@ void mostraTabela() {
 
 #define TAM_PIL 100
 int topo = -1;
-
-/*
-int pilha[TAM_PIL];
-
-void empilha (int valor) {
-    if (topo == TAM_PIL)
-        yyerror ("Pilha semântica cheia!");
-    pilha[++topo] = valor;
-}
-
-int desempilha() {
-    if (topo == -1) 
-        yyerror("Pilha semântica vazia!");
-    return pilha[topo--];
-}
-*/
 
 // Sugestão para a pilha
 struct {
