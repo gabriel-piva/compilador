@@ -18,15 +18,16 @@
 
 #include "lexico.c"
 #include "utils.c"
-int contaVar;       // Número de variáveis declaradas GLOBAIS
-int contaLoc;       // Número de variáveis declaradas LOCAIS
-int contaPar;       // Auxiliar para contar parâmetros de cada função
-int rotulo = 0;     // Marcar lugares no código
-int tipo;           // Tipo das variáveis
-char escopo = 'g';  // Escopo das variáveis
-int posFunc;        // Posição da função
-int auxPar = 0;     // Auxiliar para verificar os tipos de parâmetros
-bool retornou = false; // Verifica se a função retornou
+int contaVar;           // Número de variáveis declaradas GLOBAIS
+int contaLoc;           // Número de variáveis declaradas LOCAIS
+int contaPar;           // Auxiliar para contar parâmetros de cada função
+int rotulo = 0;         // Marcar lugares no código
+int tipo;               // Tipo das variáveis
+char escopo = 'g';      // Escopo das variáveis
+int posFunc;            // Posição da função
+int auxPar = 0;         // Auxiliar para verificar os tipos de parâmetros
+bool retornou = false;  // Verifica se a função retornou
+int nParametros;        // Número de parâmetros passados na função
 %}
 
 %token T_PROGRAMA
@@ -88,7 +89,7 @@ programa
       rotinas
       T_INICIO 
         {
-            //mostraTabela();
+            mostraTabela();
         }
         lista_comandos T_FIM
         {
@@ -195,15 +196,9 @@ funcao
         {
             int pos = buscaSimbolo(atomo);
             ajustarParametros(pos, contaPar);
-            /*
-            ajustar_parametros();
-            função para voltar na tabela de simbolos colocando os endereços 
-            dos parametros, de -3, -4, até o nome da função
-            */
         }
       variaveis 
         {
-            // empilha(contaLoc, 'n');
             if (contaLoc > 0) 
                 fprintf(yyout,"\tAMEM\t%d\n", contaLoc); 
         } 
@@ -212,13 +207,14 @@ funcao
             escopo = 'g';
             contaPar = 0;
 
-            puts("\n\nFinalização da função: ");
-             
-            puts("Antes de remover locais;\n");
-            mostraTabela();// Antes de remover as variáveis Loc e Par
+            // puts("\n\nFinalização da função: ");
+            // puts("Antes de remover locais;\n");
+            // mostraTabela();// Antes de remover as variáveis Loc e Par
+
             removerLocais(posFunc);
-            puts("Depois de remover locais;\n");
-            mostraTabela(); // Após remover as Loc e Par
+
+            // puts("Depois de remover locais;\n");
+            // mostraTabela(); // Após remover as Loc e Par
 
             if(!retornou) yyerror("Função não possui retorno.");
         }
@@ -240,7 +236,6 @@ parametro
             contaPar++;
             insereSimbolo(elemTab);
         }
- 
     ;
 
 lista_comandos
@@ -259,19 +254,15 @@ comando
 retorno
     : T_RETORNE expressao
         {
-            mostraPilha();
-            /*
-                Verificar se está no escopo local
-                Verificar se o topo é compatível
-                Deve Gerar (dapois da tradução da expressao)
-                ARZL (valor de retorno) (Ex -4)
-                DMEM (se tiver variavel local) numero de váriaveis locais
-                RTSP (n)
-            */
-            int tip = desempilha('t');
+            // mostraPilha();
+            // ARZL (valor de retorno) (Ex -4)
+            // DMEM (se tiver variavel local) numero de váriaveis locais
+            // RTSP (n)
 
+            int tip = desempilha('t');
             if (tabSimb[posFunc].tip != tip)
                 yyerror("Incompatibilidade de tipo!");
+
             fprintf(yyout, "\tARZL\t%d\n", tabSimb[posFunc].end);
 
             if (contaLoc > 0)
@@ -295,9 +286,7 @@ leitura
             if (tabSimb[pos].esc == 'g')
                 fprintf(yyout,"\tLEIA\n\tARZG\t%d\n", tabSimb[pos].end); 
             else
-                fprintf(yyout,"\tLEIA\n\tARZL\t%d\n", tabSimb[pos].end);
-            
-            //fprintf(yyout, "\tLEIA\n\tARZG\t%d\n", tabSimb[pos].end);
+                fprintf(yyout,"\tLEIA\n\tARZL\t%d\n", tabSimb[pos].end);            
         }
     ;
 
@@ -336,11 +325,9 @@ repeticao
 selecao
     : T_SE expressao T_ENTAO 
         { 
-                        puts("Aqui");
-
+            // puts("Aqui");
             int tip = desempilha('t');
-                        puts("Aqui2");
-
+            //puts("Aqui2");
             if(tip != LOG)
                 yyerror("Incompatibilidade de tipo!");
             fprintf(yyout, "\tDSVF\tL%d\n", ++rotulo);
@@ -372,6 +359,7 @@ atribuicao
             int pos = desempilha('p');
             if(tabSimb[pos].tip != tip)
                 yyerror("Incompatibilidade de tipo");
+
             if(tabSimb[pos].esc == 'g') {
                 fprintf(yyout,"\tARZG\t%d\n", tabSimb[pos].end); 
             } else { 
@@ -453,17 +441,19 @@ chamada
         {
             fprintf(yyout,"\tAMEM\t%d\n", 1);
             posFunc = buscaSimbolo(atomo);
-
+            nParametros = 0;
         }
       lista_argumentos 
         {
-            // Uma opção seria empilhar o número de argumento no final 
-            // Empilha os argumentos
-            // Salva na pilha a posição e depois os tipos de cada argumento
             auxPar = 0;
         }
       T_FECHA
         {
+            if(nParametros != tabSimb[posFunc].npar){
+                if(nParametros < tabSimb[posFunc].npar) yyerror("Número de parâmetros insuficiente na função.");
+                if(nParametros > tabSimb[posFunc].npar) yyerror("Parâmetro inesperado na função.");
+            } 
+            nParametros = 0;
             int pos = desempilha('p');
             fprintf(yyout, "\tSVCP\n");
             fprintf(yyout, "\tDSVS\tL%d\n", tabSimb[pos].rot);
@@ -475,13 +465,10 @@ lista_argumentos
     : /* vazio */
     | expressao 
         {
-            // Depos de cada expressão sobra o tipo
+            // Depois de cada expressão sobra o tipo
             int tip = desempilha('t');
-            if(tabSimb[posFunc].par[auxPar] != tip)
-                yyerror("Incompatibilidade de tipo nos parâmetros da função.");
-
-            if(contaPar - auxPar < 0) yyerror("Parâmetro inesperado na função.");
-
+            if(tabSimb[posFunc].par[auxPar] != tip) yyerror("Incompatibilidade de tipo nos parâmetros da função.");
+            nParametros++;
             auxPar++;
         }
       lista_argumentos
