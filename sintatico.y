@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "lexico.c"
 #include "utils.c"
@@ -25,6 +26,7 @@ int tipo;           // Tipo das variáveis
 char escopo = 'g';  // Escopo das variáveis
 int posFunc;        // Posição da função
 int auxPar = 0;     // Auxiliar para verificar os tipos de parâmetros
+bool retornou = false; // Verifica se a função retornou
 %}
 
 %token T_PROGRAMA
@@ -168,6 +170,7 @@ funcao
     : T_FUNC 
         {
             contaPar = 0;
+            retornou = false;
         }
       tipo T_IDENTIF 
         {
@@ -216,6 +219,8 @@ funcao
             removerLocais(posFunc);
             puts("Depois de remover locais;\n");
             mostraTabela(); // Após remover as Loc e Par
+
+            if(!retornou) yyerror("Função não possui retorno.");
         }
     ;
 
@@ -273,6 +278,8 @@ retorno
                 fprintf(yyout, "\tDMEM\t%d\n", contaLoc);
 
             fprintf(yyout,"\tRTSP\t%d\n", contaPar);
+
+            retornou = true;
         }
     ;
     
@@ -472,6 +479,9 @@ lista_argumentos
             int tip = desempilha('t');
             if(tabSimb[posFunc].par[auxPar] != tip)
                 yyerror("Incompatibilidade de tipo nos parâmetros da função.");
+
+            if(contaPar - auxPar < 0) yyerror("Parâmetro inesperado na função.");
+
             auxPar++;
         }
       lista_argumentos
