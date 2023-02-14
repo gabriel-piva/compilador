@@ -6,7 +6,7 @@
 | Disciplina : Teoria de Linguagens e Compiladores
 | Professor. : Luiz Eduardo da Silva
 | Aluno..... : Gabriel Piva Pereira
-| Data...... : 09/02/2023
+| Data...... : 14/02/2023
 +============================================================= 
 */
 
@@ -445,6 +445,8 @@ chamada
     | T_ABRE 
         {
             fprintf(yyout,"\tAMEM\t%d\n", 1);
+            posFunc = buscaSimbolo(atomo);
+
         }
       lista_argumentos 
         {
