@@ -325,7 +325,6 @@ repeticao
 selecao
     : T_SE expressao T_ENTAO 
         { 
-            // puts("Aqui");
             int tip = desempilha('t');
             //puts("Aqui2");
             if(tip != LOG)

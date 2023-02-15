@@ -7,6 +7,6 @@ programa teste
         retorne x
     fimfunc
 inicio
-    i <- f (10 V V 10)
+    i <- f (f(10 V V 10) V V 10)
     escreva i
 fimprograma
