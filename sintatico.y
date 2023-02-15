@@ -87,7 +87,7 @@ programa
       rotinas
       T_INICIO 
         {
-            mostraTabela();
+            // mostraTabela();
         }
         lista_comandos T_FIM
         {

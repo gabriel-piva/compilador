@@ -6,7 +6,7 @@
 | Disciplina : Teoria de Linguagens e Compiladores
 | Professor. : Luiz Eduardo da Silva
 | Aluno..... : Gabriel Piva Pereira
-| Data...... : 09/02/2023
+| Data...... : 15/02/2023
 +============================================================= 
 */
 
@@ -64,8 +64,8 @@ void insereSimbolo(struct elemTabSimbolos elem) {
     // maiuscula(elem.id);       // Diferenciação entre variáveis maiúsculas e minúsculas
     if(posTab == TAM_TAB) 
         yyerror("Tabela de Simbolos Cheia!");
-    for(i = posTab - 1; strcmp(tabSimb[i].id, elem.id) && i >= 0; i--)
-    // for(i = posTab - 1; (strcmp(tabSimb[i].id, elem.id) || tabSimb[i].esc != 'l') && i >= 0; i--)
+    // for(i = posTab - 1; strcmp(tabSimb[i].id, elem.id) && i >= 0; i--)
+    for(i = posTab - 1; (strcmp(tabSimb[i].id, elem.id) || tabSimb[i].esc != 'l') && i >= 0; i--)
         ;
     if (i != -1) {
         char msg[200];
@@ -115,7 +115,6 @@ void mostraTabela() {
 #define TAM_PIL 100
 int topo = -1;
 
-// Sugestão para a pilha
 struct {
     int valor;
     char tipo; // r = rotulo, n = numero de variaveis, t = tipo, p = posicao e a = número de argumentos
