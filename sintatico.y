@@ -484,7 +484,8 @@ lista_argumentos
             nParametros--;
             empilha(nParametros, 'a');
 
-            if(auxPar < tabSimb[posFunc].npar) {
+            if(auxPar < tabSimb[posFunc].npar && auxPar > 0) {
+                //printf("Comparação:\n Vetor: %d, Pilha: %d, Index: %d\n\n", tabSimb[posFunc].par[auxPar], tip, auxPar);
                 if(tabSimb[posFunc].par[auxPar] != tip) yyerror("Incompatibilidade de tipo nos parâmetros da função.");
             }
 
