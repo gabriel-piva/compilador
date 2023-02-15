@@ -79,7 +79,7 @@ programa
         { contaVar = 0; }
       variaveis 
         {
-            mostraTabela();
+            // mostraTabela();
             empilha(contaVar, 'n'); 
             if (contaVar) 
                 fprintf(yyout,"\tAMEM\t%d\n", contaVar); 
@@ -263,6 +263,8 @@ retorno
             //     if(tabSimb[posRet].esc == 'g')
             //         yyerror("Retorno da inválido da função.");
             // }
+
+            if(escopo == 'g') yyerror("Retorno fora de uma função.");
             
             int tip = desempilha('t');
             if (tabSimb[posFunc].tip != tip)
