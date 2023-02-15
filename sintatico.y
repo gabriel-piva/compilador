@@ -79,7 +79,7 @@ programa
         { contaVar = 0; }
       variaveis 
         {
-            //mostraTabela();
+            mostraTabela();
             empilha(contaVar, 'n'); 
             if (contaVar) 
                 fprintf(yyout,"\tAMEM\t%d\n", contaVar); 
