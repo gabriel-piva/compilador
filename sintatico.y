@@ -257,6 +257,13 @@ retorno
             // DMEM (se tiver variavel local) numero de váriaveis locais
             // RTSP (n)
 
+            // if(strcmp(atomo, "0") != 0) {
+            //     int posRet = buscaSimbolo(atomo);
+            //     // printf("%d\n", posRet);
+            //     if(tabSimb[posRet].esc == 'g')
+            //         yyerror("Retorno da inválido da função.");
+            // }
+            
             int tip = desempilha('t');
             if (tabSimb[posFunc].tip != tip)
                 yyerror("Incompatibilidade de tipo!");
