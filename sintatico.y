@@ -6,7 +6,7 @@
 | Disciplina : Teoria de Linguagens e Compiladores
 | Professor. : Luiz Eduardo da Silva
 | Aluno..... : Gabriel Piva Pereira
-| Data...... : 14/02/2023
+| Data...... : 15/02/2023
 +============================================================= 
 */
 
@@ -427,6 +427,7 @@ chamada
         {
             // Aqui é uma variável global ou local normal
             int pos = desempilha('p');
+            if(tabSimb[pos].cat == 'f') yyerror("Função precisa dos parêteses.");
             if(tabSimb[pos].esc == 'g') {
                 fprintf(yyout, "\tCRVG\t%d\n", tabSimb[pos].end);
             } else {
