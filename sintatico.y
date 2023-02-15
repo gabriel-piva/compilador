@@ -25,9 +25,7 @@ int rotulo = 0;         // Marcar lugares no código
 int tipo;               // Tipo das variáveis
 char escopo = 'g';      // Escopo das variáveis
 int posFunc;            // Posição da função
-int auxPar = 0;         // Auxiliar para verificar os tipos de parâmetros
 bool retornou = false;  // Verifica se a função retornou
-int nParametros;        // Número de parâmetros passados na função
 %}
 
 %token T_PROGRAMA
@@ -440,19 +438,21 @@ chamada
         {
             fprintf(yyout,"\tAMEM\t%d\n", 1);
             posFunc = buscaSimbolo(atomo);
-            nParametros = 0;
+            empilha(tabSimb[posFunc].npar, 'a');
+            //nParametros = 0;
         }
       lista_argumentos 
         {
-            auxPar = 0;
+            // auxPar = 0;
         }
       T_FECHA
         {
-            if(nParametros != tabSimb[posFunc].npar){
-                if(nParametros < tabSimb[posFunc].npar) yyerror("Número de parâmetros insuficiente na função.");
-                if(nParametros > tabSimb[posFunc].npar) yyerror("Parâmetro inesperado na função.");
+            int nParametros = desempilha('a');
+            if(nParametros != 0){
+                if(nParametros > 0) yyerror("Número de parâmetros insuficiente na função.");
+                if(nParametros < 0) yyerror("Parâmetro inesperado na função.");
             } 
-            nParametros = 0;
+            
             int pos = desempilha('p');
             fprintf(yyout, "\tSVCP\n");
             fprintf(yyout, "\tDSVS\tL%d\n", tabSimb[pos].rot);
@@ -466,9 +466,18 @@ lista_argumentos
         {
             // Depois de cada expressão sobra o tipo
             int tip = desempilha('t');
-            if(tabSimb[posFunc].par[auxPar] != tip) yyerror("Incompatibilidade de tipo nos parâmetros da função.");
-            nParametros++;
-            auxPar++;
+
+            int nParametros = desempilha('a');
+
+            int auxPar = tabSimb[posFunc].npar - nParametros;
+
+            nParametros--;
+            empilha(nParametros, 'a');
+
+            if(auxPar < tabSimb[posFunc].npar) {
+                if(tabSimb[posFunc].par[auxPar] != tip) yyerror("Incompatibilidade de tipo nos parâmetros da função.");
+            }
+
         }
       lista_argumentos
         {

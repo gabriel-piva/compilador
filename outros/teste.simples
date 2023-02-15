@@ -1,12 +1,19 @@
 programa teste
-    inteiro i j k
-    func inteiro f ( inteiro a logico b logico c inteiro d)
-    inteiro x y z
+    inteiro i
+    func inteiro f ( inteiro a inteiro b )
+    inteiro x
     inicio
-        x <- 10 + a
+        x <- a + b
         retorne x
     fimfunc
+
+    func inteiro g (inteiro c)
+    inicio
+        retorne c
+    fimfunc
+
 inicio
-    i <- f (f(10 V V 10) V V 10)
+    i <- f (f(10 10) g(f(2 3)))
     escreva i
+    escreva g(5)
 fimprograma
