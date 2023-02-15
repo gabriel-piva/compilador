@@ -12,8 +12,18 @@ programa teste
         retorne c
     fimfunc
 
+    func logico h (inteiro a logico b)
+    inicio
+        se a > 0 e V entao
+            retorne F
+        senao
+            retorne V
+        fimse
+    fimfunc
+
 inicio
     i <- f (f(10 10) g(f(2 3)))
     escreva i
     escreva g(5)
+    escreva h(2 h(10 F))
 fimprograma

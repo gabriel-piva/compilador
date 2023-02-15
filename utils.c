@@ -118,7 +118,7 @@ int topo = -1;
 // Sugestão para a pilha
 struct {
     int valor;
-    char tipo; // r rotulo, n numero de variaveis, t tipo e p posicao
+    char tipo; // r = rotulo, n = numero de variaveis, t = tipo, p = posicao e a = número de argumentos
 } pilha[TAM_PIL];
 
 void empilha (int valor, char tipo) {
