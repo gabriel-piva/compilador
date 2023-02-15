@@ -1,0 +1,13 @@
+programa varLocNaMain
+    inteiro c d
+    func inteiro maior(inteiro A inteiro B)
+    inicio
+        se A > B
+            entao retorne A
+            senao retorne B
+        fimse
+    fimfunc
+inicio
+    escreva maior(10 20)
+    escreva A
+fimprograma
