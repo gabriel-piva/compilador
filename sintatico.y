@@ -436,7 +436,7 @@ chamada
         {
             // Aqui é uma variável global ou local normal
             int pos = desempilha('p');
-            if(tabSimb[pos].cat == 'f') yyerror("Função precisa dos parêteses.");
+            if(tabSimb[pos].cat == 'f') yyerror("Função precisa dos parênteses.");
             if(tabSimb[pos].esc == 'g') {
                 fprintf(yyout, "\tCRVG\t%d\n", tabSimb[pos].end);
             } else {
@@ -484,8 +484,7 @@ lista_argumentos
             nParametros--;
             empilha(nParametros, 'a');
 
-            if(auxPar < tabSimb[posFunc].npar && auxPar > 0) {
-                //printf("Comparação:\n Vetor: %d, Pilha: %d, Index: %d\n\n", tabSimb[posFunc].par[auxPar], tip, auxPar);
+            if(auxPar < tabSimb[posFunc].npar && auxPar >= 0) {
                 if(tabSimb[posFunc].par[auxPar] != tip) yyerror("Incompatibilidade de tipo nos parâmetros da função.");
             }
 
