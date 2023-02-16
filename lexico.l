@@ -6,7 +6,7 @@
 | Disciplina : Teoria de Linguagens e Compiladores
 | Professor. : Luiz Eduardo da Silva
 | Aluno..... : Gabriel Piva Pereira
-| Data...... : 25/01/2023
+| Data...... : 16/02/2023
 +============================================================= 
 */
 

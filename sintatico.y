@@ -6,7 +6,7 @@
 | Disciplina : Teoria de Linguagens e Compiladores
 | Professor. : Luiz Eduardo da Silva
 | Aluno..... : Gabriel Piva Pereira
-| Data...... : 15/02/2023
+| Data...... : 16/02/2023
 +============================================================= 
 */
 
@@ -79,7 +79,6 @@ programa
         { contaVar = 0; }
       variaveis 
         {
-            // mostraTabela();
             empilha(contaVar, 'n'); 
             if (contaVar) 
                 fprintf(yyout,"\tAMEM\t%d\n", contaVar); 
@@ -97,6 +96,7 @@ programa
             fprintf(yyout, "\tFIMP\n");
         }
     ;
+
 cabecalho
     : T_PROGRAMA T_IDENTIF
         { fprintf(yyout, "\tINPP\n"); }
@@ -153,7 +153,7 @@ lista_variaveis
     ;
 
 rotinas
-    : /* Não tem função*/
+    :
     | 
         { fprintf(yyout, "\tDSVS\tL%d\n", 0); }
         funcoes
@@ -207,12 +207,12 @@ funcao
 
             // puts("\n\nFinalização da função: ");
             // puts("Antes de remover locais;\n");
-            // mostraTabela();// Antes de remover as variáveis Loc e Par
+            // mostraTabela(); // Antes de remover as variáveis Locais e Parâmetros
 
             removerLocais(posFunc);
 
             // puts("Depois de remover locais;\n");
-            // mostraTabela(); // Após remover as Loc e Par
+            // mostraTabela(); // Após remover as Locais e Parâmetros
 
             if(!retornou) yyerror("Função não possui retorno.");
         }
@@ -252,17 +252,9 @@ comando
 retorno
     : T_RETORNE expressao
         {
-            // mostraPilha();
             // ARZL (valor de retorno) (Ex -4)
             // DMEM (se tiver variavel local) numero de váriaveis locais
             // RTSP (n)
-
-            // if(strcmp(atomo, "0") != 0) {
-            //     int posRet = buscaSimbolo(atomo);
-            //     // printf("%d\n", posRet);
-            //     if(tabSimb[posRet].esc == 'g')
-            //         yyerror("Retorno da inválido da função.");
-            // }
 
             if(escopo == 'g') yyerror("Retorno fora de uma função.");
             
@@ -434,7 +426,7 @@ identificador
 chamada
     : /* vazio */
         {
-            // Aqui é uma variável global ou local normal
+            // Sem parênteses - Variável Local ou Global
             int pos = desempilha('p');
             if(tabSimb[pos].cat == 'f') yyerror("Função precisa dos parênteses.");
             if(tabSimb[pos].esc == 'g') {
@@ -449,12 +441,8 @@ chamada
             fprintf(yyout,"\tAMEM\t%d\n", 1);
             posFunc = buscaSimbolo(atomo);
             empilha(tabSimb[posFunc].npar, 'a');
-            //nParametros = 0;
         }
       lista_argumentos 
-        {
-            // auxPar = 0;
-        }
       T_FECHA
         {
             int nParametros = desempilha('a');
@@ -490,17 +478,6 @@ lista_argumentos
 
         }
       lista_argumentos
-        {
-            //int aux = tabSimb[posFunc].npar - 1;
-            // for(int i = aux; i >= 0; i--) {
-            //     printf("i = %d, valor = %d\n", i, tabSimb[posFunc].par[i]);
-            //     // mostraPilha();
-            //     int t = desempilha('t');
-            //     if(tabSimb[posFunc].par[i] != t) {
-            //         yyerror("Incompatibilidade de tipo nos parâmetros da função.");
-            //     }
-            // }
-        }
     ;
 
 termo 
