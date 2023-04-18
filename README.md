@@ -27,6 +27,7 @@ O resultado é um arquivo _NOME.mvs_, que possui as instruções para serem inte
 A interpretação é realizada pelo executável **mvs**, resultado do arquivo _mvs.c_ presente no repositório. 
 Para interpretar um arquivo _.mvs_:
 ```
+gcc mvs.c -o mvs
 ./mvs <NOME>[.mvs]
 ```
 Como resultado da execução, as instruções do programa original _.simples_ são interpretadas e executadas no terminal, recebendo entradas pelo próprio terminal e mostrando as saídas, por exemplo. 
