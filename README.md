@@ -1,10 +1,41 @@
 # Compilador
 
-Projeto final da disciplina de Teoria de Linguagens e Compiladores, da Universidade Federal de Alfenas (Unifal).
+Projeto final da disciplina Teoria de Linguagens e Compiladores, do curso de Ciência da Computação da Universidade Federal de Alfenas (UNIFAL).
 
-O compilador é desenvolvido para a linguagem Simples, uma linguagem semelhante a portugol com os termos em português. Exemplo:
+O compilador é desenvolvido para a linguagem Simples, uma linguagem semelhante a portugol.
 
-``` cpp
+O compilador utiliza Flex e Bison do Unix e transforma os códigos _.simples_ em arquivos de instruções _.mvs_ (em que MVS vem de Máquina Virtual Simples).
+
+### Utilização
+
+Para gerar o executável **simples** no terminal Ubuntu:
+```
+flex -o lexico.c lexico.l
+bison -v -d sintatico.y -o sintatico.c
+gcc sintatico.c -o simples
+```
+Ou através do arquivo makefile, com o comando ```make```.
+
+Com o executável **simples**, para compilar um programa _.simples_:
+```
+./simples <NOME>[.simples]
+```
+Ao compilar, também são realizadas várias verificações no arquivo, para garantir que não há nenhum erro no código. Caso exista algum erro, ele é alertado no terminal. 
+
+O resultado é um arquivo _NOME.mvs_, que possui as instruções para serem interpretadas. 
+
+A interpretação é realizada pelo executável **mvs**, resultado do arquivo _mvs.c_ presente no repositório. 
+Para interpretar um arquivo _.mvs_:
+```
+./mvs <NOME>[.mvs]
+```
+Como resultado da execução, as instruções do programa original _.simples_ são interpretadas e executadas no terminal, recebendo entradas pelo próprio terminal e mostrando as saídas, por exemplo. 
+
+### Exemplo
+
+Será compilado e executado o seguinte programa em simples, que calcula o fatorial de um número recebido como entrada:
+
+```cpp
 programa fatorial
 inteiro x
 
@@ -23,8 +54,13 @@ inicio
 fimprograma
 ```
 
-O compilador utiliza Flex e Bison do Unix e usando os arquivos lexico.l e sintatico.y, transforma os códigos .simples em arquivos .mvs, com instruções. MVS vem de Máquina Virtual Simples.
-O código simples mostrado seria traduzido para o seguinte .mvs:
+Para compilar o programa, no terminal:
+```
+make 
+./simples fatorial.simples
+```
+
+O resultado será o seguinte arquivo mvs:
 
 ```
 	INPP
@@ -63,4 +99,40 @@ L0	NADA
 	FIMP
 ```
 
-Usando o executável mvs do arquivo mvs.c, é realizada a leitura do arquivo .mvs e as intruções são executadas, mostrando as saídas no console.
+Com o executável **mvs** na pasta, para interpretar as intruções:
+```
+./mvs fatorial.mvs
+```
+O resultado será a seguinte execução no terminal:
+```
+./mvs fatorial.mvs
+? 5
+Saida = 120
+
+Fim do programa.
+```
+
+O terminal com a execução completa:
+```
+> gpiva@S1:/compilador$ make
+	flex -o lexico.c lexico.l;\
+	bison -v -d sintatico.y -o sintatico.c;\
+	gcc sintatico.c -o simples;
+
+> gpiva@S1:/compilador$ ./simples exemplos/fatorial.simples
+	Programa OK!
+
+> gpiva@S1:/compilador$ ./mvs exemplos/fatorial.mvs
+	? 5
+	Saida = 120
+
+	Fim do programa.
+```
+
+#### Requisitos para utilização
+
+- Terminal Ubuntu com Flex e Bison instalados.
+```
+flex -> sudo apt install flex
+bison -> sudo apt install bison
+```
